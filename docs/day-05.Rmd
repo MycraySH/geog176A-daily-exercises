@@ -29,11 +29,7 @@ I will get you started this week, in the following code chunk, I am attaching th
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-
-url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
-
-covid = read_csv(url)
-
+covid = read_csv("D:/LifeInUCSB/Study/GEOG176A/week2/assignment5/geog176A-daily-exercises/data/covid.csv")
 head(covid, 5)
 ```
 
@@ -51,8 +47,12 @@ Use `dplyr` verbs to  create a data.frame of the **5** counties with the most cu
 
 (**Hint:** `filter`, `arrange`)
 
-```{r}
-
+```{r,message=FALSE, warning=FALSE}
+covid%>%
+filter(date == max(date))
+select(county,cases)
+arrange(-cases)
+head(5)
 ```
 
 ## Question 2: 
@@ -61,8 +61,12 @@ Use `dplyr` verbs to create a data.frame of the **5** states with the _most_ cas
 
 (**Hint:** `filter`, `group_by`, `summarize`, `arrange`)
 
-```{r}
-
+```{r,message=FALSE, warning=FALSE}
+covid %>%
+group_by(state)
+summarize(current_cases = sum(cases)) 
+arrange(-current_cases)
+head(5)
 ```
 
 ## Question 3: 
@@ -71,8 +75,16 @@ Use the `dplyr` verbs to report the **5** counties with the _worst_ current deat
 
 (**Hint:** `filter`, `mutate`, `arrange`)
 
-```{r}
-
+```{r,message=FALSE, warning=FALSE}
+covid%>%
+X1 = col_character()
+filter(date == max(date))
+group_by(county)
+mutate(deathratiocase = (deaths/cases)*100)
+select(county,deathratiocase)
+filter(deathratiocase<=100)
+arrange(-deathratiocase)
+head(5)
 ```
 
 
@@ -82,8 +94,16 @@ Use the `dplyr` verbs to report the **5** states with the _worst_ current death/
 
 (**Hint:** `filter`, `group_by`, `summarize`, `mutate`, `arrange`)
 
-```{r}
-
+```{r,message=FALSE, warning=FALSE}
+covid%>%
+filter(date == max(date))
+group_by(state)
+summarize(sumdeath = sum(deaths),sumcases = sum(cases))
+mutate(deathratiocase = (sumdeath/sumcases)*100)
+select(state,deathratiocase)
+filter(deathratiocase<=100)
+arrange(-deathratiocase)
+head(5)
 ```
 
 
